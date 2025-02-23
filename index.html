@@ -56,7 +56,9 @@
             font-size: 1.1rem;
             color: #666;
         }
-
+        table {
+            margin-bottom: 2.5rem;
+        }
         .question {
             display: none;
             margin: 20px 0;
@@ -336,7 +338,6 @@
         }
 
         #results p {
-            white-space: pre-wrap;
             font-size: 1.1rem;
             line-height: 1.8;
         }
@@ -454,7 +455,7 @@
 </head>
 <body>
     <header>
-        <h1>Welcome to Dark's Cannon Calculator</h1>
+        <h1>Welcome to Dark's Interactive Cannon Calculator</h1>
         <p>By: Sam and Table</p>
         <p>Additional Contributions: Name & MadMan25</p>
         <p>Translated to github.io by ParzivalAFK</p>
@@ -510,7 +511,7 @@
         <div class="input-group">
             <p>Length (Max 1,000): <input type="number" id="length" min="1" max="1000" value="200" style="border-color: #00d800;"></p>
             <p>Depth (Max 1,000): <input type="number" id="depth" min="1" max="1000" value="250" style="border-color: #009cff;"></p>
-            <p>Initial offset (Min 18): <input type="number" id="offset" min="18" max="360" value="32" style="border-color: #ff6c00;"></p>
+            <p>Initial offset (Min 18): <input type="number" id="offset" min="18" max="2000" value="32" style="border-color: #ff6c00;"></p>
         </div>
         <div class="navigation">
             <button id="q3Next" onclick="nextQuestion(3)" class="nav-button next-button" disabled>Next</button>
@@ -524,7 +525,7 @@
             <button onclick="selectExplode('yes')" class="explodeChoice">Blow up cannon</button>
         </div>
         <div class="button-group" id="optimizeOptions" style="display: none;">
-            <p><strong>To prevent the cannon from exploding, we need to expand its dimensions to a safe size multiple. Which dimension would you prefer to expand?</strong></p>
+            <p><strong>To prevent the cannon from exploding, we need to adjust its dimensions to a safe size multiple. Which dimension would you prefer to expand?</strong></p>
             <button onclick="selectOptimize('length')" class="optimizeChoice">Length</button>
             <button onclick="selectOptimize('depth')" class="optimizeChoice">Depth</button>
         </div>
@@ -605,7 +606,7 @@
                 const length = document.getElementById('length').value;
                 const depth = document.getElementById('depth').value;
                 const offset = document.getElementById('offset').value;
-                q3Next.disabled = !(length >= 1 && length <= 1000 && depth >= 1 && depth <= 1000 && offset >= 18 && offset <= 360);
+                q3Next.disabled = !(length >= 1 && length <= 1000 && depth >= 1 && depth <= 1000 && offset >= 18 && offset <= 2000);
             }
         }
 
@@ -618,7 +619,7 @@
                 const depth = document.getElementById('depth').value;
                 const offset = document.getElementById('offset').value;
 
-                if (length < 1 || length > 1000 || depth < 1 || depth > 1000 || offset < 18 || offset > 360) {
+                if (length < 1 || length > 1000 || depth < 1 || depth > 1000 || offset < 18 || offset > 2000) {
                     alert('Please enter valid dimensions within the specified ranges.');
                     return;
                 }
@@ -751,10 +752,9 @@
 
             let result = `
             <div>
-                <strong>Machine Configuration:</strong>
                 <table>
                     <tr>
-                        <th>Component:</th><th>Items</th>
+                        <th>Machine Configuration:</th><th>Items</th>
                     </tr>
                     <tr>
                         <td>Tunnel Length (Dropper)</td><td>${field_1}</td>
@@ -778,10 +778,10 @@
                         <th>Operation Time:</th><th></th>
                     </tr>
                     <tr>
-                        <td>${field_5}</td>
+                        <td>Time: </td> <td>${field_5}</td>
                     </tr>
                     <tr>
-                        <td>In-game ticks: ${field_8}</td>
+                        <td>In-game ticks: </td> <td>${field_8}</td>
                     </tr>
                 </table>
             </div>`;
@@ -842,20 +842,17 @@
 
             result += `
             <div>
-            <h2>Proper Cannon Loading Guide</h2>
-                <h3>Singleplayer</h3>
+                <strong>Singleplayer loading</strong>
                 <ul>
                     <li>Set your Render Distance to 2 chunks and AFK in the designated "Chunk Loader" chunk.</li>
                     <li>Alternatively, build a chunk loader and play elsewhere, ensuring that you do not load the red (lazy) chunks while the cannon is operating.</li>
                 </ul>
-                <h3>Multiplayer</h3>
+                <strong>Multiplayer loading</strong>
                 <ul>
                     <li>Since most servers do not allow render distance adjustments, your best option is to build a chunk loader in the designated "Chunk Loader" chunk.</li>
                     <li>Ensure that no other players on the server accidentally load the cannon’s red (lazy) chunks during operation.</li>
                 </ul>
-                <h3>General Considerations (Both Singleplayer & Multiplayer)</h3>
-                    <p>In vanilla Minecraft, you need a mechanism to activate the cannon while ensuring that the red (lazy) chunks remain unloaded.</p>
-                <h4>Viable "Remote" Activation Methods (to trigger the machine after leaving the area via a chunk loader):</h4>
+                <h4>Methods to start cannon on while keeping lazy chunks in their lazy state include:</h4>
                 <ul>
                     <li>Item Despawn Timer</li>
                     <li>Entity Detector (e.g., a minecart pressing against a pressure plate)</li>
@@ -869,7 +866,6 @@
             // Add Optional Commands section
             result += `
                 <div>
-                <strong>Optional Commands:</strong>
                 <table>
                     <tr>
                         <th>If you want to see cannon running:</th><th>Commands</th>
