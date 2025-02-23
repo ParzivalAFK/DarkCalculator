@@ -441,6 +441,7 @@
     <header>
         <h1>Welcome to Dark's Cannon Calculator</h1>
         <p>By: Sam and Table</p>
+        <p>Additional Contributions: Name & MadMan25</p>
         <p>Translated to github.io by ParzivalAFK</p>
     </header>
 
@@ -520,7 +521,7 @@
     </div>
 
     <script>
-        alert("WARNING - THIS IS A PROOF OF CONCEPT - Still in testing - and credit has not been properly attributed yet.");
+        alert("STATUS: Alpha Testing State. Please report any issues or suggestions. Thank you!");
         let currentQuestion = 1;
         const data = { explode: 'yes' };
 
@@ -747,31 +748,33 @@
             let result = `<strong>Machine Configuration:</strong>\n<table>\n    <tr><th>Component:</th><th>Items</th></tr>\n    <tr><td>Tunnel Length (Dropper)</td><td>${field_1}</td></tr>\n    <tr><td>Barrel Count</td><td>${field_2}</td></tr>\n    <tr><td>Row Spacing (Hopper)</td><td>${field_3}</td></tr>\n    <tr><td>Initial Offset (Dropper)</td><td>${field_4}</td></tr>\n</table>`;
             result += `\n<table>\n    <tr><th>Operation Time:</th><th></th></tr>\n    <tr><td>${field_5}</td></tr>\n    </td><td>In-game ticks: ${field_8}</td></tr></table>`;
             result += `\n<table>\n    <tr><th>Info:</th><th></th></tr>\n    <tr><td> Machine Likely to Explode:</td><td>${field_9}</td></tr>\n    <tr><td>Cannon Offset:</td><td>${field_10} Blocks</td></tr>\n    <tr><td> Approx Depth:</td><td>${field_11} Blocks</td></tr>\n    <tr><td>Approx Length:</td><td>${field_12} Blocks</td></tr></table>`;
-
+            
             result += `\n<strong>BEFORE Starting Cannon:</strong>\n`;
             result += `<ul>`;
-            result += `<li>Make sure the three red chunks and green chunk have sufficient clerance by clearing them out to chunk borders and a few blocks above.</li>`;
-            result += `<li>This is a LAZY CHUNK MACHIENE. Out of the four chunks the cannon covers you must ensure that <strong>ONLY the green chunk is active.</strong> The red chunks need to be in a Lazy Chunk state!!!</li>`;
-            result += `<li><strong>DO NOT load the red lazy chunks of the cannon while the machine is duping TNT.</strong> You must wait the full timer time and perhaps more for safety.</li>`;
-            result += `</ul>`;
-            result += `\n<strong>Notes:</strong>\n`;
-            result += `<ul>`;
-            result += `<li>Schematics can be rotated and mirrored</li>`;
-            result += `<li>For nether use, replace water logged stair with Enchating Table</li>`;
-            result += `<li>For Netherite mining, place the Enchanting Tables at y=11 (Thanks MadMan25)</li>`;
-            result += `</ul>`;
+                result += `<li>Make sure the three red chunks and green chunk have sufficient clerance by clearing them out to chunk borders and a few blocks above.</li>`;
+                result += `<li>This is a LAZY CHUNK MACHIENE. Out of the four chunks the cannon covers you must ensure that <strong>ONLY the green chunk is active.</strong> The red chunks need to be in a Lazy Chunk state!!!</li>`;
+                result += `<li><strong>DO NOT load the red lazy chunks of the cannon while the machine is duping TNT.</strong> You must wait the full timer time and perhaps more for safety.</li>`;
+                result += `</ul>`;
+                result += `\n<strong>Notes:</strong>\n`;
+                result += `<ul>`;
+                    result += `<li>Schematics can be rotated and mirrored</li>`;
+                    result += `<li>For nether use, replace water logged stair with Enchating Table</li>`;
+                    result += `<li>For Netherite mining, place the Enchanting Tables at y=11 (Thanks MadMan25)</li>`;
+                    result += `</ul>`;
 
-            // Add Optional Commands section
-            result += `\n<strong>Optional Commands:</strong>\n`;
-            result += `<strong>If you want to see cannon running:</strong>\n`;
-            result += `    Option 1): Vanilla Spectator Mode:\n`;
-            result += `        <code>/gamerule spectatorgeneratechunks false</code>\n`;
-            result += `    Option 2): Carpet Mod:\n`;
-            result += `        <code>/carpet creativePlayersLoadChunks false</code>\n\n`;
-            result += `<strong>Lag Optimizations (With Carpet and Carpet TIS mod):</strong>\n`;
-            result += `    <code>/carpet OptimizedTNT True</code>\n`;
-            result += `    <code>/carpet OptimizedTNTHighPriority True</code>\n`;
-            result += `    <code>/carpet OptimizedFastEntityMovement True</code>`;
+                    // Add Optional Commands section
+                    result += `\n\n<strong>Optional Commands:</strong>
+                        <table>
+                            <tr><th>If you want to see cannon running:</th><th>Commands</th></tr>\n
+                            <tr><td><strong>Option 1):</strong> Vanilla Spectator Mode</td> <td><code>/gamerule spectatorgeneratechunks false</code></td></tr>\n
+                            <tr><td><strong>Option 2):</strong> Carpet Mod</td><td><code>/carpet creativePlayersLoadChunks false</code></td></tr>\n
+                            <tr><th>Lag Optimizations (With Carpet and Carpet TIS mod):</th><th> </th></tr>\n
+                            <tr><td>Optimizes TNT for better performance</td><td><code>/carpet OptimizedTNT True</code></td></tr>\n
+                            <tr><td>Gives TNT updates higher priority</td><td><code>/carpet OptimizedTNTHighPriority True</code></td></tr>\n
+                            <tr><td>Speeds up entity movement calculations</td><td><code>/carpet OptimizedFastEntityMovement True</code></td></tr>\n                
+                        </table>`;
+                    
+
 
             document.getElementById('resultText').innerHTML = result; // Update results text
         }
