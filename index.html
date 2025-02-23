@@ -649,6 +649,24 @@
             }
         }
 
+        function formatTime(time_hr_min_sec){
+            let days = time_hr_min_sec;
+            let totalSeconds = days * 24 * 60 * 60;
+            let hours = Math.floor(totalSeconds / 3600);
+            totalSeconds %= 3600;
+            let minutes = Math.floor(totalSeconds / 60);
+            let seconds = Math.ceil(totalSeconds % 60);
+            let formattedTime = '';
+            if (hours > 1) { formattedTime += `${hours} Hour, `; }
+            if (hours === 1) { formattedTime += `${hours} Hour, `; }
+            if (minutes > 1) { formattedTime += `${minutes} Minutes, and `; }
+            if (minutes === 1) { formattedTime += `${minutes} Minute, and `; }
+            if (seconds > 1) { formattedTime += `${seconds} Seconds `; }
+            if (seconds === 1) { formattedTime += `${seconds} Second `; }
+            if (seconds === 0) { formattedTime += `${seconds} Seconds `; }
+            return formattedTime;
+        }
+
         function formatStacks(items) {
             const stacks = Math.floor(items / 64);
             const remainder = items % 64;
@@ -708,21 +726,12 @@
             let calculated_length_safe =	Math.ceil( tunnel_length_dropper_safe* 1.8)
             
 
-            let days = time_hr_min_sec;
-            let totalSeconds = days * 24 * 60 * 60;
-            let hours = Math.floor(totalSeconds / 3600);
-            totalSeconds %= 3600;
-            let minutes = Math.floor(totalSeconds / 60);
-            let seconds = Math.ceil(totalSeconds % 60);
-
-
             let field_1 = formatStacks(tunnel_length_dropper)
             let field_2 = formatStacks(barrel_count)
             let field_3 = formatStacks(row_spacing_hopper)
             let field_4 = formatStacks(initial_offset_dropper)
-            let field_5 = hours
-            let field_6 = minutes
-            let field_7 = seconds
+            let field_5 = formatTime(time_hr_min_sec)
+
             let field_8 = game_ticks
             let field_9 = explode_when_done_calc ? "Yes" : "No"
             let field_10 = User_Cannon_Offset
@@ -742,9 +751,7 @@
                 field_2 = formatStacks(barrel_count_safe)
                 field_3 = formatStacks(row_spacing_hopper_safe)
                 field_4 = formatStacks(initial_offset_dropper_safe)
-                field_5 = hours
-                field_6 = minutes
-                field_7 = seconds
+                field_5 = formatTime(time_hr_min_sec_safe)
                 field_8 = game_ticks_safe
                 field_11 = calculated_depth_safe
                 field_12 = calculated_length_safe
@@ -753,7 +760,7 @@
 
             // Format the output as requested, with bold headers and a table for Machine Configuration
             let result = `<strong>Machine Configuration:</strong>\n<table>\n    <tr><th>Component:</th><th>Items</th></tr>\n    <tr><td>Tunnel Length (Dropper)</td><td>${field_1}</td></tr>\n    <tr><td>Barrel Count</td><td>${field_2}</td></tr>\n    <tr><td>Row Spacing (Hopper)</td><td>${field_3}</td></tr>\n    <tr><td>Initial Offset (Dropper)</td><td>${field_4}</td></tr>\n</table>`;
-            result += `\n<table>\n    <tr><th>Operation Time:</th><th></th></tr>\n    <tr><td>${field_5} Hours ${field_6} Minutes ${field_7} Seconds</td></tr>\n    </td><td>In-game ticks: ${field_8}</td></tr></table>`;
+            result += `\n<table>\n    <tr><th>Operation Time:</th><th></th></tr>\n    <tr><td>${field_5}</td></tr>\n    </td><td>In-game ticks: ${field_8}</td></tr></table>`;
             result += `\n<table>\n    <tr><th>Info:</th><th></th></tr>\n    <tr><td> Machine Likely to Explode:</td><td>${field_9}</td></tr>\n    <tr><td>Cannon Offset:</td><td>${field_10} Blocks</td></tr>\n    <tr><td> Approx Depth:</td><td>${field_11} Blocks</td></tr>\n    <tr><td>Approx Length:</td><td>${field_12} Blocks</td></tr></table>`;
 
             result += `\n<strong>BEFORE Starting Cannon:</strong>\n`;
