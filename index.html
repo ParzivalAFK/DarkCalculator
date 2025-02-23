@@ -750,6 +750,7 @@
                 field_4 = formatStacks(initial_offset_dropper_safe)
                 field_5 = formatTime(time_hr_min_sec_safe)
                 field_8 = game_ticks_safe
+                field_9 = "No"
                 field_11 = calculated_depth_safe
                 field_12 = calculated_length_safe
             }
@@ -775,12 +776,14 @@
             // Add Optional Commands section
             result += `\n<strong>Optional Commands:</strong>\n`;
             result += `<strong>If you want to see cannon running:</strong>\n`;
-            result += `    Vanilla Spectator Mode: ->        /gamerule spectatorgeneratechunks false\n`;
-            result += `    Carpet Mod: ->                    /carpet creativePlayersLoadChunks false\n\n`;
+            result += `    Option 1): Vanilla Spectator Mode:\n`;
+            result += `        <code>/gamerule spectatorgeneratechunks false</code>\n`;
+            result += `    Option 2): Carpet Mod:\n`;
+            result += `        <code>/carpet creativePlayersLoadChunks false</code>\n\n`;
             result += `<strong>Lag Optimizations (With Carpet and Carpet TIS mod):</strong>\n`;
-            result += `    /carpet OptimizedTNT True\n`;
-            result += `    /carpet OptimizedTNTHighPriority True\n`;
-            result += `    /carpet OptimizedFastEntityMovement True`;
+            result += `    <code>/carpet OptimizedTNT True</code>\n`;
+            result += `    <code>/carpet OptimizedTNTHighPriority True</code>\n`;
+            result += `    <code>/carpet OptimizedFastEntityMovement True</code>`;
 
             document.querySelectorAll('.question').forEach(q => q.style.display = 'none');
             document.getElementById('results').style.display = 'block';
