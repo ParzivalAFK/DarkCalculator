@@ -508,12 +508,9 @@
             <button onclick="selectExplode('yes')" class="explodeChoice">Blow up cannon</button>
         </div>
         <div class="button-group" id="optimizeOptions" style="display: none;">
-            <p><strong>To prevent the cannon from exploding please choose either the Length or Depth to expand to a safe size.</strong></p>
+            <p><strong>To prevent the cannon from exploding, we need to expand its dimensions to a safe size multiple. Which dimension would you prefer to expand?</strong></p>
             <button onclick="selectOptimize('length')" class="optimizeChoice">Length</button>
             <button onclick="selectOptimize('depth')" class="optimizeChoice">Depth</button>
-        </div>
-        <div class="navigation" id="calcNavigation" style="display: none;">
-            <button id="q4Next" onclick="calculate()" class="nav-button next-button" disabled>Calculate my Cannon!</button>
         </div>
     </div>
 
@@ -548,20 +545,16 @@
             document.querySelectorAll('.explodeChoice').forEach(btn => {
                 btn.classList.remove('selected');
                 // Remove calculator icon from all buttons
-                btn.style.content = '';
+                btn.innerHTML = btn.innerHTML.replace('<i class="fas fa-calculator" style="margin-right: 8px;"></i>', '');
             });
             event.target.classList.add('selected');
             if (choice === 'yes') {
-                event.target.style.content = "'\f1ec'"; // Add calculator icon to "Blow up cannon"
-                event.target.style.fontFamily = '"Font Awesome 5 Free"';
-                event.target.style.fontWeight = '900';
-                event.target.style.marginRight = '8px';
-                document.getElementById('optimizeOptions').style.display = 'none';
-                document.getElementById('calcNavigation').style.display = 'block'; // Show Calculate button for "Blow up cannon"
-                updateNextButton(4); // Enable Calculate button
+                // Add calculator icon to "Blow up cannon" using innerHTML
+                event.target.innerHTML = '<i class="fas fa-calculator" style="margin-right: 8px;"></i>Blow up cannon';
+                calculate(); // Calculate results before navigating
+                nextQuestion(4); // Navigate to results page immediately
             } else if (choice === 'no') {
                 document.getElementById('optimizeOptions').style.display = 'block';
-                document.getElementById('calcNavigation').style.display = 'none'; // Hide Calculate button for "Save my cannon"
             }
         }
 
@@ -569,8 +562,8 @@
             data.optimize = choice;
             document.querySelectorAll('.optimizeChoice').forEach(btn => btn.classList.remove('selected'));
             event.target.classList.add('selected');
-            document.getElementById('calcNavigation').style.display = 'block'; // Show Calculate button after optimization
-            updateNextButton(4);
+            calculate(); // Calculate results before navigating
+            nextQuestion(4); // Navigate to results page after optimization
         }
 
         function validateInput(input) {
@@ -600,20 +593,11 @@
                 q3Next.disabled = !(length >= 1 && length <= 1000 && 
                                   depth >= 1 && depth <= 1000 && 
                                   offset >= 18 && offset <= 360);
-            } else if (question === 4) {
-                const q4Next = document.getElementById('q4Next');
-                const calcNav = document.getElementById('calcNavigation');
-                if (calcNav.style.display === 'block') {
-                    q4Next.disabled = !data.explode || (data.explode === 'no' && !data.optimize);
-                } else {
-                    q4Next.disabled = true; // Ensure disabled if hidden
-                }
             }
         }
 
         // Initial state check
         updateNextButton(3);
-        updateNextButton(4);
 
         function nextQuestion(current) {
             if (current === 3) {
@@ -633,7 +617,11 @@
 
             document.getElementById(`q${current}`).classList.remove('active');
             currentQuestion++;
-            document.getElementById(`q${currentQuestion}`).classList.add('active');
+            if (currentQuestion === 5) {
+                document.getElementById('results').style.display = 'block';
+            } else {
+                document.getElementById(`q${currentQuestion}`).classList.add('active');
+            }
         }
 
         function prevQuestion(current) {
@@ -785,9 +773,7 @@
             result += `    <code>/carpet OptimizedTNTHighPriority True</code>\n`;
             result += `    <code>/carpet OptimizedFastEntityMovement True</code>`;
 
-            document.querySelectorAll('.question').forEach(q => q.style.display = 'none');
-            document.getElementById('results').style.display = 'block';
-            document.getElementById('resultText').innerHTML = result; // Using innerHTML for HTML table and bold rendering
+            document.getElementById('resultText').innerHTML = result; // Update results text
         }
     </script>
 </body>
