@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark's Cannon Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome CDN for calculator icon -->
+    <style>
+        :root {
+            --primary-color: #393939; /* Green for default buttons */
+            --selected-color: #777777; /* Bright yellow for selected state */
+            --green-color: #00a811; /* Bright yellow for selected state */
+            --nav-color: #607D8B; /* Blue-gray for navigation buttons */
+            --background-color: #f5f7fa;
+            --text-color: #333;
+            --error-color: #f44336; /* Red for error/danger */
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .question {
+            display: none;
+            margin: 20px 0;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .question.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .question h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 1.5rem;
+        }
+
+        .card {
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: border-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            text-align: center;
+        }
+
+        .card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        .card.selected {
+            border-color: var(--selected-color);
+            background-color: #fff9e6;
+            box-shadow: 0 4px 8px rgba(255, 202, 40, 0.3);
+        }
+
+        .card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .card-description, .card-description-2 {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description-2 {
+            font-style: italic;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            outline: none;
+            position: relative;
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        button:hover:not(:disabled) {
+            background-color: #45a049; /* Darker green for hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
+
+        .selected {
+            background-color: var(--selected-color); /* Bright yellow for selected */
+            border: 2px solid var(--selected-color);
+            color: #333; /* Dark text for contrast on yellow */
+        }
+
+        .selected:hover {
+            background-color: #F9A825; /* Slightly darker yellow on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 202, 40, 0.3);
+        }
+
+        /* Navigation buttons (Next) */
+        .nav-button {
+            background-color: var(--nav-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            color: white;
+        }
+
+        .nav-button:hover:not(:disabled) {
+            background-color: #546E7A; /* Darker blue-gray on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        .nav-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Calculator icon for Calculate button */
+        .next-button::before {
+            content: '\f1ec'; /* Font Awesome calculator icon */
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            margin-right: 8px; /* Space before text */
+        }
+
+        /* Special styling for Question 4 buttons */
+        #q4 .explodeChoice:nth-child(1) { /* "It is okay to blow up" button */
+            background-color: var(--error-color); /* Red for destructive action */
+        }
+
+        #q4 .explodeChoice:nth-child(1):hover:not(:disabled) {
+            background-color: #DA190B; /* Darker red on hover */
+        }
+
+        #q4 .explodeChoice:nth-child(2) { /* "Attempt to keep it in one piece" button */
+            background-color: var(--green-color); /* Green for safe action */
+        }
+
+        #q4 .explodeChoice:nth-child(2):hover:not(:disabled) {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        /* Optimize options header styling */
+        #optimizeOptions p {
+            font-size: 1.3rem; /* Larger text for header */
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Loading spinner for calculate button */
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #fff;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        button.loading .loading-spinner {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        input[type="number"] {
+            width: 100%;
+            max-width: 150px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 5px rgba(33, 150, 243, 0.3);
+        }
+
+        input[type="number"]:invalid {
+            border-color: var(--error-color);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group p {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        #imageContainer {
+            float: right;
+            margin-left: 2rem;
+            max-width: 50%;
+        }
+
+        img {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .navigation {
+            display: flex;
+            gap: 10px;
+            margin-top: 2rem;
+        }
+
+        #results {
+            display: none;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            margin-top: 20px;
+        }
+
+        #results h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        #results p {
+            white-space: pre-wrap;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        #results p strong {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        #results table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        #results th, #results td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #results th {
+            background-color: var(--background-color);
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        #results td {
+            background-color: white;
+        }
+
+        .invalid {
+            border-color: var(--error-color);
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            header {
+                padding: 1rem;
+            }
+
+            .question, #results {
+                padding: 1.5rem;
+            }
+
+            #imageContainer {
+                float: none;
+                margin: 0 auto 1rem;
+                max-width: 100%;
+            }
+
+            .navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            button, .nav-button {
+                width: 100%;
+                padding: 10px 20px;
+            }
+
+            input[type="number"] {
+                max-width: 100%;
+            }
+
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+
+            #results table {
+                font-size: 0.9rem;
+            }
+
+            #q4 h2 {
+                font-size: 1.5rem; /* Slightly smaller on mobile for better fit */
+            }
+
+            #optimizeOptions p {
+                font-size: 1.1rem; /* Adjust for mobile readability */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Dark's Cannon Calculator</h1>
+        <p>By: Sam and Table</p>
+        <p>Translated to github.io by ParzivalAFK</p>
+    </header>
+
+    <div id="q1" class="question active">
+        <h2>Select Targeted Rock Type:</h2>
+        <div class="card-container">
+            <div class="card" onclick="selectRockTypeAndNext('overworld-stone', 'Overworld', 'Stone', 'Typically Above y=8')">
+                <img src="./textures/screenshot1.png" alt="Overworld Stone" onerror="this.src='default-image.png'; console.error('Image not found:', this.src);">
+                <div class="card-title">Overworld</div>
+                <div class="card-description">Stone Height</div>
+            </div>
+            <div class="card" onclick="selectRockTypeAndNext('overworld-deepslate', 'Overworld', 'Deepslate', 'Typically Below y=8 [Diamond Default]')">
+                <img src="./textures/screenshot2.png" alt="Overworld Deepslate" onerror="this.src='default-image.png'; console.error('Image not found:', this.src);">
+                <div class="card-title">Overworld</div>
+                <div class="card-description">Deepslate Height</div>
+                <div class="card-description-2">Typical Diamond Setup</div>
+            </div>
+            <div class="card" onclick="selectRockTypeAndNext('nether-netherrack', 'Nether', 'Netherrack Only', '(If your blast area does not have basalt areas)')">
+                <img src="./textures/screenshot3.png" alt="Nether Netherrack" onerror="this.src='default-image.png'; console.error('Image not found:', this.src);">
+                <div class="card-title">Nether</div>
+                <div class="card-description">Netherrack Only</div>
+            </div>
+            <div class="card" onclick="selectRockTypeAndNext('nether-netherrack-basalt', 'Nether', 'Netherrack + Basalt', '[Ancient Debris Default]')">
+                <img src="./textures/screenshot4.png" alt="Nether Netherrack + Basalt" onerror="this.src='default-image.png'; console.error('Image not found:', this.src);">
+                <div class="card-title">Nether</div>
+                <div class="card-description">Netherrack + Basalt</div>
+                <div class="card-description-2">Typical Ancient Debris Setup</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="q2" class="question">
+        <h2>Choose Orientation</h2>
+        <div class="card-container">
+            <div class="card" onclick="selectOrientationAndNext('up')">
+                <img src="./textures/diagram_up.png" alt="Up Orientation" onerror="this.src='default-image.png'; console.error('Image not found:', this.src);">
+                <div class="card-title">Up</div>
+            </div>
+            <div class="card" onclick="selectOrientationAndNext('side')">
+                <img src="./textures/diagram_side.png" alt="Side Orientation" onerror="this.src='default-image.png'; console.error('Image not found:', this.src);">
+                <div class="card-title">Side</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="q3" class="question">
+        <h2>Dimensions:</h2>
+        <div id="imageContainer">
+            <img id="orientationImage" src="" alt="Cannon Orientation">
+        </div>
+        <div class="input-group">
+            <p>Length (Max 1,000): <input type="number" id="length" min="1" max="1000" value="200" style="border-color: #00d800;"></p>
+            <p>Depth (Max 1,000): <input type="number" id="depth" min="1" max="1000" value="250" style="border-color: #009cff;"></p>
+            <p>Initial offset (Min 18): <input type="number" id="offset" min="18" max="360" value="32" style="border-color: #ff6c00;"></p>
+        </div>
+        <div class="navigation">
+            <button id="q3Next" onclick="nextQuestion(3)" class="nav-button next-button" disabled>Next</button>
+        </div>
+    </div>
+
+    <div id="q4" class="question">
+        <h2>Is it ok if the cannon explodes on completion?</h2>
+        <div class="button-group" id="explodeButtons">
+            <button onclick="selectExplode('yes')" class="explodeChoice">It is okay to blow up</button>
+            <button onclick="selectExplode('no')" class="explodeChoice">Attempt to keep it in one piece</button>
+        </div>
+        <div class="button-group" id="optimizeOptions" style="display: none;">
+            <p><strong>To attempt to keep the cannon in one piece choose either Length or Depth to change during our calculations.</strong></p>
+            <button onclick="selectOptimize('length')" class="optimizeChoice">Length</button>
+            <button onclick="selectOptimize('depth')" class="optimizeChoice">Depth</button>
+        </div>
+        <div class="navigation">
+            <button id="q4Next" onclick="calculate()" class="nav-button next-button" disabled>Calculate my Cannon!</button>
+        </div>
+    </div>
+
+    <div id="results">
+        <h2>Results:</h2>
+        <p id="resultText"></p>
+    </div>
+
+    <script>
+        alert("WARNING - THIS IS A PROOF OF CONCEPT - THE CALCULATOR IS NOT FUNCTIONAL YET Since the math was not matching for me and I wanted to get permission to port it over first.");
+        let currentQuestion = 1;
+        const data = { explode: 'yes' };
+
+        function selectRockTypeAndNext(type, dimension, hardness, description2) {
+            data.miningType = dimension.toLowerCase();
+            data.material = hardness.toLowerCase().split(' + ').join(' and ');
+            document.querySelectorAll('.card').forEach(card => card.classList.remove('selected'));
+            event.target.closest('.card').classList.add('selected');
+            nextQuestion(1); // Automatically navigate to Question 2
+        }
+
+        function selectOrientationAndNext(orientation) {
+            data.orientation = orientation;
+            document.querySelectorAll('.card').forEach(card => card.classList.remove('selected'));
+            event.target.closest('.card').classList.add('selected');
+            updateOrientationImage(); // Update the image in Question 3
+            nextQuestion(2); // Automatically navigate to Question 3
+        }
+
+        function selectExplode(choice) {
+            data.explode = choice;
+            document.querySelectorAll('.explodeChoice').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
+            document.getElementById('optimizeOptions').style.display = choice === 'no' ? 'block' : 'none';
+            updateNextButton(4);
+        }
+
+        function selectOptimize(choice) {
+            data.optimize = choice;
+            document.querySelectorAll('.optimizeChoice').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
+            updateNextButton(4);
+        }
+
+        function validateInput(input) {
+            const value = parseInt(input.value) || input.min;
+            if (value < input.min || value > input.max) {
+                input.value = value < input.min ? input.min : input.max;
+                input.classList.add('invalid');
+                setTimeout(() => input.classList.remove('invalid'), 2000); // Highlight red for 2 seconds
+            } else {
+                input.classList.remove('invalid');
+            }
+            updateNextButton(3);
+        }
+
+        ['length', 'depth', 'offset'].forEach(id => {
+            const input = document.getElementById(id);
+            input.addEventListener('blur', () => validateInput(input));
+            input.addEventListener('input', () => updateNextButton(3)); // Check on every input change too
+        });
+
+        function updateNextButton(question) {
+            if (question === 3) {
+                const q3Next = document.getElementById('q3Next');
+                const length = document.getElementById('length').value;
+                const depth = document.getElementById('depth').value;
+                const offset = document.getElementById('offset').value;
+                q3Next.disabled = !(length >= 1 && length <= 1000 && 
+                                  depth >= 1 && depth <= 1000 && 
+                                  offset >= 18 && offset <= 360);
+            } else if (question === 4) {
+                const q4Next = document.getElementById('q4Next');
+                q4Next.disabled = !data.explode || (data.explode === 'no' && !data.optimize);
+            }
+        }
+
+        // Initial state check
+        updateNextButton(3);
+        updateNextButton(4);
+
+        function nextQuestion(current) {
+            if (current === 3) {
+                const length = document.getElementById('length').value;
+                const depth = document.getElementById('depth').value;
+                const offset = document.getElementById('offset').value;
+
+                if (length < 1 || length > 1000 || depth < 1 || depth > 1000 || offset < 18 || offset > 360) {
+                    alert('Please enter valid dimensions within the specified ranges.');
+                    return;
+                }
+
+                data.length = length;
+                data.depth = depth;
+                data.offset = offset;
+            }
+
+            document.getElementById(`q${current}`).classList.remove('active');
+            currentQuestion++;
+            document.getElementById(`q${currentQuestion}`).classList.add('active');
+        }
+
+        function prevQuestion(current) {
+            document.getElementById(`q${current}`).classList.remove('active');
+            currentQuestion--;
+            document.getElementById(`q${currentQuestion}`).classList.add('active');
+        }
+
+        function updateOrientationImage() {
+            const image = document.getElementById('orientationImage');
+            if (data.orientation === 'up') {
+                image.src = './textures/diagram_up.png';
+                image.alt = 'Up Orientation';
+            } else if (data.orientation === 'side') {
+                image.src = './textures/diagram_side.png';
+                image.alt = 'Side Orientation';
+            }
+        }
+
+        function formatStacks(items) {
+            const stacks = Math.floor(items / 64);
+            const remainder = items % 64;
+            if (stacks === 0 && remainder === 0) return "0 Stacks + 0 Items";
+            if (stacks === 0) return `${remainder} Items`;
+            if (remainder === 0) return `${stacks} Stacks`;
+            return `${stacks} Stacks + ${remainder} Items`;
+        }
+
+        function calculate() {
+            const calculateBtn = document.getElementById('q4Next');
+            calculateBtn.classList.add('loading');
+            
+            if (!data.miningType || !data.material || !data.orientation) {
+                alert('Please complete all questions');
+                calculateBtn.classList.remove('loading');
+                return;
+            }
+
+            const length = parseInt(document.getElementById('length').value);
+            const depth = parseInt(document.getElementById('depth').value);
+            const offset = parseInt(document.getElementById('offset').value);
+
+            if (length < 1 || length > 1000 || depth < 1 || depth > 1000 || offset < 18 || offset > 360) {
+                alert('Please enter valid dimensions within the specified ranges.');
+                calculateBtn.classList.remove('loading');
+                return;
+            }
+
+            // Store the numeric values in data for calculations
+            data.length = length;
+            data.depth = depth;
+            data.offset = offset;
+
+            // Calculations based on Google Sheet formulas
+            const tunnelLength = length + 27; // Tunnel Length (Dropper) = Length + 27
+            const barrelCount = Math.ceil(length / 10); // Barrel Count = Length / 10, rounded up
+            const rowSpacing = Math.round(depth / 5); // Row Spacing (Hopper) = Depth / 5, rounded
+            const initialOffsetDropper = offset * 1.1; // Initial Offset (Dropper) = Offset * 1.1
+
+            // Ensure minimum Initial Offset is at least Row Spacing and 18
+            if (initialOffsetDropper < rowSpacing || initialOffsetDropper < 18) {
+                data.offset = Math.max(rowSpacing, 18) / 1.1; // Adjust offset to meet minimum
+            }
+
+            // Operation Time calculation using the formula: (24x * y + 20x) / 1200 minutes
+            const x = tunnelLength; // Tunnel Length as item count in dropper
+            const y = barrelCount / rowSpacing; // Barrel count divided by row spacing
+            const minutes = (24 * x * y + 20 * x) / 1200; // Time in minutes
+            const seconds = minutes * 60; // Convert to seconds
+            const hours = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = Math.floor(seconds % 60);
+            const inGameTicks = Math.round(seconds * 20); // 20 ticks per second
+
+            const explodes = data.explode === 'yes';
+
+            // Format machine configuration items in X Stacks + Y Items format (stack of 64)
+            const tunnelLengthStacks = formatStacks(tunnelLength);
+            const barrelCountStacks = formatStacks(barrelCount);
+            const rowSpacingStacks = formatStacks(rowSpacing);
+            const initialOffsetDropperStacks = formatStacks(Math.round(initialOffsetDropper));
+
+            // Format the output as requested, with bold headers and a table for Machine Configuration
+            let result = `<strong>Machine Configuration:</strong>\n<table>\n    <tr><th>Component:</th><th>Items</th></tr>\n    <tr><td>Tunnel Length (Dropper)</td><td>${tunnelLengthStacks}</td></tr>\n    <tr><td>Barrel Count</td><td>${barrelCountStacks}</td></tr>\n    <tr><td>Row Spacing (Hopper)</td><td>${rowSpacingStacks}</td></tr>\n    <tr><td>Initial Offset (Dropper)</td><td>${initialOffsetDropperStacks}</td></tr>\n</table>`;
+            result += `\n<table>\n    <tr><th>Operation Time:</th><th></th></tr>\n    <tr><td>Hours Minutes and Seconds</td><td>${hours} Hours ${mins} Minutes ${secs} Seconds</td></tr>\n    <tr><td>In-game ticks</td><td>${inGameTicks.toLocaleString()}</td></tr></table>`;
+            result += `\n<table>\n    <tr><th>Operation Type:</th><th></th></tr>\n    <tr><td> Machine Likely to Explode:</td><td>${explodes ? 'Yes' : 'No'}</td></tr>\n    <tr><td>Cannon Offset:</td><td>${offset} Blocks</td></tr>\n    <tr><td> Approx Depth:</td><td>${depth} Blocks</td></tr>\n    <tr><td>Approx Length:</td><td>${length} Blocks</td></tr></table>`;
+
+            result += `\n<strong>BEFORE Starting Cannon:</strong>\n`;
+            result += `<ul>`;
+            result += `<li>Make sure the three red chunks and green chunk have sufficient clerance by clearing them out to chunk borders and a few blocks above.</li>`;
+            result += `<li>This is a LAZY CHUNK MACHIENE. Out of the four chunks the cannon covers you must ensure that <strong>ONLY the green chunk is active.</strong> The red chunks need to be in a Lazy Chunk state!!!</li>`;
+            result += `<li><strong>DO NOT load the red lazy chunks of the cannon while the machine is duping TNT.</strong> You must wait the full timer time and perhaps more for safety.</li>`;
+            result += `</ul>`;
+            result += `\n<strong>Notes:</strong>\n`;
+            result += `<ul>`;
+            result += `<li>Schematics can be rotated and mirrored</li>`;
+            result += `<li>For nether use, replace water logged stair with Enchating Table</li>`;
+            result += `<li>For Netherite mining, place the Enchanting Tables at y=11 (Thanks MadMan25)</li>`;
+            result += `</ul>`;
+
+            // Add Optional Commands section
+            result += `\n<strong>Optional Commands:</strong>\n`;
+            result += `<strong>If you want to see cannon running:</strong>\n`;
+            result += `    Vanilla Spectator Mode: ->        /gamerule spectatorgeneratechunks false\n`;
+            result += `    Carpet Mod: ->                    /carpet creativePlayersLoadChunks false\n\n`;
+            result += `<strong>Lag Optimizations (With Carpet and Carpet TIS mod):</strong>\n`;
+            result += `    /carpet OptimizedTNT True\n`;
+            result += `    /carpet OptimizedTNTHighPriority True\n`;
+            result += `    /carpet OptimizedFastEntityMovement True`;
+
+            document.querySelectorAll('.question').forEach(q => q.style.display = 'none');
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('resultText').innerHTML = result; // Using innerHTML for HTML table and bold rendering
+            
+            calculateBtn.classList.remove('loading'); // Remove loading state after calculation
+        }
+    </script>
+</body>
+</html>
