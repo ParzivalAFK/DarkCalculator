@@ -368,6 +368,16 @@
             background-color: white;
         }
 
+        /* Indent bullet points in results */
+        #results ul {
+            margin-left: 3rem; /* Indent bullet points by 2rem */
+            margin-bottom: 0rem; /* Add space below each list */
+        }
+
+        #results li {
+            margin-bottom: 0.15rem; /* Space between list items for readability */
+        }
+
         .invalid {
             border-color: var(--error-color);
             animation: shake 0.5s;
@@ -433,6 +443,11 @@
 
             #optimizeOptions p {
                 font-size: 1.1rem; /* Adjust for mobile readability */
+            }
+
+            /* Adjust bullet point indentation on mobile */
+            #results ul {
+                margin-left: 2.5rem; /* Reduce indentation on mobile for better fit */
             }
         }
     </style>
@@ -766,12 +781,12 @@
             result += `\n<strong>Notes:</strong>\n`;
             result += `<ul>`;
                 result += `<li>Schematics can be rotated and mirrored.</li>`;
-                result += `<li>For Nether Dimension use, replace Waterlogged Stair with Enchating Table.</li>`;
+                result += `<li>For Nether Dimension use, replace Waterlogged Stair with Enchanting Table.</li>`;
                 result += `<li>For Netherite mining, place the Enchanting Tables at y=11 (<em>Thanks MadMan25!</em>).</li>`;
             result += `</ul>`;
 
                     // Add Optional Commands section
-            result += `\n\n<strong>Optional Commands:</strong>
+            result += `\n<strong>Optional Commands:</strong>
                 <table>
                     <tr><th>If you want to see cannon running:</th><th>Commands</th></tr>\n
                     <tr><td><strong>Option 1):</strong> Vanilla Spectator Mode</td> <td><code>/gamerule spectatorgeneratechunks false</code></td></tr>\n
