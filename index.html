@@ -751,29 +751,37 @@
             
             result += `\n<strong>BEFORE Starting Cannon:</strong>\n`;
             result += `<ul>`;
-                result += `<li>Make sure the three red chunks and green chunk have sufficient clerance by clearing them out to chunk borders and a few blocks above.</li>`;
-                result += `<li>This is a LAZY CHUNK MACHIENE. Out of the four chunks the cannon covers you must ensure that <strong>ONLY the green chunk is active.</strong> The red chunks need to be in a Lazy Chunk state!!!</li>`;
-                result += `<li><strong>DO NOT load the red lazy chunks of the cannon while the machine is duping TNT.</strong> You must wait the full timer time and perhaps more for safety.</li>`;
-                result += `</ul>`;
-                result += `\n<strong>Notes:</strong>\n`;
-                result += `<ul>`;
-                    result += `<li>Schematics can be rotated and mirrored</li>`;
-                    result += `<li>For nether use, replace water logged stair with Enchating Table</li>`;
-                    result += `<li>For Netherite mining, place the Enchanting Tables at y=11 (Thanks MadMan25)</li>`;
-                    result += `</ul>`;
+                    result += `<li><strong>Ensure sufficient clearance.</strong> Clear the three red chunks and the green chunk to the chunk borders and a few blocks above.</li>`;
+                    result += `<li><strong>Manage chunk activation.</strong> This is a <strong>LAZY CHUNK MACHINE</strong>—only the green chunk should be active. The red chunks <strong>must</strong> remain in a Lazy Chunk state.</li>`;
+                    result += `<li><strong>Avoid loading red chunks.</strong> Do not load the red chunks while the machine is duping TNT. Wait for the full timer duration (or longer) before returning.</li>`;
+            result += `</ul>`;
+            result += `\n<strong>Resources:</strong>\n`;
+            result += `<ul>`;
+                    result += `<li>OG Calculator: <a href='https://docs.google.com/spreadsheets/d/12KDoqfOpkEjcVNU6M5PPXR_9Livz2Vt1xgP4NBo0eBg'><strong>Darks Cannon by Sam. and Table</strong></a></li>`;
+                    result += `<li>For any questions regarding the use of this calculator, join the <a href='https://discord.gg/vPyUBcdmZV'><strong>TNT Archive</strong></a> discord server and ping <code>@sam</code> or <code>@name</code>.</li>`;
+                    result += `<li>Dark's Original Video: <a href='https://www.youtube.com/watch?v=5hq4TwvVp6o'><strong>YouTube</strong></a></li>`;
+                    result += `<li>Schematics: <a href='https://www.mediafire.com/file/gtfve0x8ozkjddi/Mining_machines.zip/file'><strong>Mediafire</strong></a></li>`;
+            result += `</ul>`;
+
+            result += `\n<strong>Notes:</strong>\n`;
+            result += `<ul>`;
+                result += `<li>Schematics can be rotated and mirrored.</li>`;
+                result += `<li>For Nether Dimension use, replace Waterlogged Stair with Enchating Table.</li>`;
+                result += `<li>For Netherite mining, place the Enchanting Tables at y=11 (<em>Thanks MadMan25!</em>).</li>`;
+            result += `</ul>`;
 
                     // Add Optional Commands section
-                    result += `\n\n<strong>Optional Commands:</strong>
-                        <table>
-                            <tr><th>If you want to see cannon running:</th><th>Commands</th></tr>\n
-                            <tr><td><strong>Option 1):</strong> Vanilla Spectator Mode</td> <td><code>/gamerule spectatorgeneratechunks false</code></td></tr>\n
-                            <tr><td><strong>Option 2):</strong> Carpet Mod</td><td><code>/carpet creativePlayersLoadChunks false</code></td></tr>\n
-                            <tr><th>Lag Optimizations (With Carpet and Carpet TIS mod):</th><th> </th></tr>\n
-                            <tr><td>Optimizes TNT for better performance</td><td><code>/carpet OptimizedTNT True</code></td></tr>\n
-                            <tr><td>Gives TNT updates higher priority</td><td><code>/carpet OptimizedTNTHighPriority True</code></td></tr>\n
-                            <tr><td>Speeds up entity movement calculations</td><td><code>/carpet OptimizedFastEntityMovement True</code></td></tr>\n                
-                        </table>`;
-                    
+            result += `\n\n<strong>Optional Commands:</strong>
+                <table>
+                    <tr><th>If you want to see cannon running:</th><th>Commands</th></tr>\n
+                    <tr><td><strong>Option 1):</strong> Vanilla Spectator Mode</td> <td><code>/gamerule spectatorgeneratechunks false</code></td></tr>\n
+                    <tr><td><strong>Option 2):</strong> Carpet Mod</td><td><code>/carpet creativePlayersLoadChunks false</code></td></tr>\n
+                    <tr><th>Lag Optimizations (With Carpet and Carpet TIS mod):</th><th> </th></tr>\n
+                    <tr><td>Optimizes TNT for better performance</td><td><code>/carpet OptimizedTNT True</code></td></tr>\n
+                    <tr><td>Gives TNT updates higher priority</td><td><code>/carpet OptimizedTNTHighPriority True</code></td></tr>\n
+                    <tr><td>Speeds up entity movement calculations</td><td><code>/carpet OptimizedFastEntityMovement True</code></td></tr>\n                
+                </table>`;
+            
 
 
             document.getElementById('resultText').innerHTML = result; // Update results text
