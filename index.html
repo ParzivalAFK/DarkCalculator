@@ -209,20 +209,32 @@
         }
 
         /* Special styling for Question 4 buttons */
-
-        #q4 .explodeChoice:nth-child(1) { /* "Attempt to keep it in one piece" button */
+        #q4 .explodeChoice:nth-child(1) { /* "Save my cannon" button (first button) */
             background-color: var(--green-color); /* Green for safe action */
         }
 
         #q4 .explodeChoice:nth-child(1):hover:not(:disabled) {
             background-color: #45a049; /* Darker green on hover */
         }
-        #q4 .explodeChoice:nth-child(2) { /* "It is okay to blow up" button */
+
+        #q4 .explodeChoice:nth-child(2) { /* "Blow up cannon" button (second button) */
             background-color: var(--error-color); /* Red for destructive action */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* Space between icon and text */
         }
 
         #q4 .explodeChoice:nth-child(2):hover:not(:disabled) {
             background-color: #DA190B; /* Darker red on hover */
+        }
+
+        /* Button group for horizontal layout on Question 4 */
+        #q4 .button-group#explodeButtons {
+            display: flex;
+            gap: 10px; /* Space between buttons */
+            justify-content: center; /* Center horizontally */
+            margin-bottom: 1rem; /* Add space below the buttons */
         }
 
         /* Optimize options header styling */
@@ -410,6 +422,11 @@
                 font-size: 1.5rem; /* Slightly smaller on mobile for better fit */
             }
 
+            #q4 .button-group#explodeButtons {
+                flex-direction: column; /* Stack buttons vertically on mobile */
+                gap: 10px;
+            }
+
             #optimizeOptions p {
                 font-size: 1.1rem; /* Adjust for mobile readability */
             }
@@ -487,11 +504,11 @@
             <button onclick="selectExplode('yes')" class="explodeChoice">Blow up cannon</button>
         </div>
         <div class="button-group" id="optimizeOptions" style="display: none;">
-            <p><strong>To attempt to keep the cannon in one piece choose either Length or Depth to change during our calculations.</strong></p>
+            <p><strong>To prevent the cannon from exploding please choose either the Length or Depth to expand to a safe size.</strong></p>
             <button onclick="selectOptimize('length')" class="optimizeChoice">Length</button>
             <button onclick="selectOptimize('depth')" class="optimizeChoice">Depth</button>
         </div>
-        <div class="navigation">
+        <div class="navigation" id="calcNavigation" style="display: none;">
             <button id="q4Next" onclick="calculate()" class="nav-button next-button" disabled>Calculate my Cannon!</button>
         </div>
     </div>
@@ -524,16 +541,31 @@
 
         function selectExplode(choice) {
             data.explode = choice;
-            document.querySelectorAll('.explodeChoice').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.explodeChoice').forEach(btn => {
+                btn.classList.remove('selected');
+                // Remove calculator icon from all buttons
+                btn.style.content = '';
+            });
             event.target.classList.add('selected');
-            document.getElementById('optimizeOptions').style.display = choice === 'no' ? 'block' : 'none';
-            updateNextButton(4);
+            if (choice === 'yes') {
+                event.target.style.content = "'\f1ec'"; // Add calculator icon to "Blow up cannon"
+                event.target.style.fontFamily = '"Font Awesome 5 Free"';
+                event.target.style.fontWeight = '900';
+                event.target.style.marginRight = '8px';
+                document.getElementById('optimizeOptions').style.display = 'none';
+                document.getElementById('calcNavigation').style.display = 'block'; // Show Calculate button for "Blow up cannon"
+                updateNextButton(4); // Enable Calculate button
+            } else if (choice === 'no') {
+                document.getElementById('optimizeOptions').style.display = 'block';
+                document.getElementById('calcNavigation').style.display = 'none'; // Hide Calculate button for "Save my cannon"
+            }
         }
 
         function selectOptimize(choice) {
             data.optimize = choice;
             document.querySelectorAll('.optimizeChoice').forEach(btn => btn.classList.remove('selected'));
             event.target.classList.add('selected');
+            document.getElementById('calcNavigation').style.display = 'block'; // Show Calculate button after optimization
             updateNextButton(4);
         }
 
@@ -566,7 +598,12 @@
                                   offset >= 18 && offset <= 360);
             } else if (question === 4) {
                 const q4Next = document.getElementById('q4Next');
-                q4Next.disabled = !data.explode || (data.explode === 'no' && !data.optimize);
+                const calcNav = document.getElementById('calcNavigation');
+                if (calcNav.style.display === 'block') {
+                    q4Next.disabled = !data.explode || (data.explode === 'no' && !data.optimize);
+                } else {
+                    q4Next.disabled = true; // Ensure disabled if hidden
+                }
             }
         }
 
