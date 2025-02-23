@@ -781,10 +781,42 @@
             result += `\n<strong>Notes:</strong>\n`;
             result += `<ul>`;
                 result += `<li>Schematics can be rotated and mirrored.</li>`;
+                result += `<li>Max size, with current containers, is about 1k by 1k.</li>`;
                 result += `<li>For Nether Dimension use, replace Waterlogged Stair with Enchanting Table.</li>`;
                 result += `<li>For Netherite mining, place the Enchanting Tables at y=11 (<em>Thanks MadMan25!</em>).</li>`;
+                result += `<li>Using the non-breaking configuration, you can split your mining project into segments by running a full batch, increasing the offset, and running it again. This allows you to create a blast area that exceeds the 1,000-block batch depth. (<em>To increase the length, you would need to move or build a new machine.</em>)</li>`;
             result += `</ul>`;
 
+            result += `\n<strong>Notes:</strong>\n`;
+            result += `<ul>`;
+                result += `<li>Schematics can be rotated and mirrored.</li>`;
+                result += `<li>Max size, with current containers, is about 1k by 1k.</li>`;
+                result += `<li>For Nether Dimension use, replace Waterlogged Stair with Enchanting Table.</li>`;
+                result += `<li>For Netherite mining, place the Enchanting Tables at y=11 (<em>Thanks MadMan25!</em>).</li>`;
+                result += `<li>Using the non-breaking configuration, you can split your mining project into segments by running a full batch, increasing the offset, and running it again. This allows you to create a blast area that exceeds the 1,000-block batch depth. (To increase the length, you would need to move or build a new machine.)</li>`;
+            result += `</ul>`;
+
+            result += `<h2>Proper Cannon Loading Guide</h2>`
+            result += `<h3>Singleplayer</h3>`
+            result += `<ul>`
+            result += `    <li>Set your Render Distance to 2 chunks and AFK in the designated "Chunk Loader" chunk.</li>`
+            result += `    <li>Alternatively, build a chunk loader and play elsewhere, ensuring that you do not load the red (lazy) chunks while the cannon is operating.</li>`
+            result += `</ul>`
+            result += `<h3>Multiplayer</h3>`
+            result += `<ul>`
+            result += `    <li>Since most servers do not allow render distance adjustments, your best option is to build a chunk loader in the designated "Chunk Loader" chunk.</li>`
+            result += `    <li>Ensure that no other players on the server accidentally load the cannon’s red (lazy) chunks during operation.</li>`
+            result += `</ul>`
+            result += `<h3>General Considerations (Both Singleplayer & Multiplayer)</h3>`
+            result += `<p>In vanilla Minecraft, you need a mechanism to activate the cannon while ensuring that the red (lazy) chunks remain unloaded.</p>`
+            result += `<h4>Viable "Remote" Activation Methods (to trigger the machine after leaving the area via a chunk loader):</h4>`
+            result += `<ul>`
+            result += `    <li>Item Despawn Timer</li>`
+            result += `    <li>Entity Detector (e.g., a minecart pressing against a pressure plate)</li>`
+            result += `    <li>Hopper Timer</li>`
+            result += `</ul>`
+            result += `<h4>Alternative for Singleplayer (AFK in Chunk Loader Chunk)</h4>`
+            result += `<p>If you prefer to AFK in the chunk loader chunk, the simplest method is to build a redstone line extending to your chunk, allowing you to activate the cannon remotely.</p>`
                     // Add Optional Commands section
             result += `\n<strong>Optional Commands:</strong>
                 <table>
