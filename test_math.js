@@ -1,13 +1,13 @@
-const UserDepth = 123
-const UserLength = 456
-const User_Cannon_Offset = 50   
-const depth_length_user_selection = "Barrel count" 
-const Overworld = false
-const Stone = false
-const Deepslate = false
-const Nether = true
-const Basalt = true
-const Netherack = false
+let UserDepth = 123
+let UserLength = 456
+let User_Cannon_Offset = 50   
+let depth_length_user_selection = "Barrel count" 
+let Overworld = false
+let Stone = false
+let Deepslate = false
+let Nether = true
+let Basalt = true
+let Netherack = false
 
 function mround(number, multiple) {
     return Math.round(number / multiple) * multiple;

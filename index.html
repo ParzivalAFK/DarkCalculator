@@ -209,20 +209,20 @@
         }
 
         /* Special styling for Question 4 buttons */
-        #q4 .explodeChoice:nth-child(1) { /* "It is okay to blow up" button */
-            background-color: var(--error-color); /* Red for destructive action */
-        }
 
-        #q4 .explodeChoice:nth-child(1):hover:not(:disabled) {
-            background-color: #DA190B; /* Darker red on hover */
-        }
-
-        #q4 .explodeChoice:nth-child(2) { /* "Attempt to keep it in one piece" button */
+        #q4 .explodeChoice:nth-child(1) { /* "Attempt to keep it in one piece" button */
             background-color: var(--green-color); /* Green for safe action */
         }
 
-        #q4 .explodeChoice:nth-child(2):hover:not(:disabled) {
+        #q4 .explodeChoice:nth-child(1):hover:not(:disabled) {
             background-color: #45a049; /* Darker green on hover */
+        }
+        #q4 .explodeChoice:nth-child(2) { /* "It is okay to blow up" button */
+            background-color: var(--error-color); /* Red for destructive action */
+        }
+
+        #q4 .explodeChoice:nth-child(2):hover:not(:disabled) {
+            background-color: #DA190B; /* Darker red on hover */
         }
 
         /* Optimize options header styling */
@@ -481,10 +481,10 @@
     </div>
 
     <div id="q4" class="question">
-        <h2>Is it ok if the cannon explodes on completion?</h2>
+        <h2>Allow cannon to explode when done?</h2>
         <div class="button-group" id="explodeButtons">
-            <button onclick="selectExplode('yes')" class="explodeChoice">It is okay to blow up</button>
-            <button onclick="selectExplode('no')" class="explodeChoice">Attempt to keep it in one piece</button>
+            <button onclick="selectExplode('no')" class="explodeChoice">Save my cannon</button>
+            <button onclick="selectExplode('yes')" class="explodeChoice">Blow up cannon</button>
         </div>
         <div class="button-group" id="optimizeOptions" style="display: none;">
             <p><strong>To attempt to keep the cannon in one piece choose either Length or Depth to change during our calculations.</strong></p>
@@ -502,7 +502,7 @@
     </div>
 
     <script>
-        alert("WARNING - THIS IS A PROOF OF CONCEPT - THE CALCULATOR IS NOT FUNCTIONAL YET Since the math was not matching for me and I wanted to get permission to port it over first.");
+        alert("WARNING - THIS IS A PROOF OF CONCEPT - Still in testing - and credit has not been properly attributed yet.");
         let currentQuestion = 1;
         const data = { explode: 'yes' };
 
@@ -622,63 +622,102 @@
         }
 
         function calculate() {
-            const calculateBtn = document.getElementById('q4Next');
-            calculateBtn.classList.add('loading');
+            let UserDepth = parseInt(document.getElementById('depth').value);
+            let UserLength = parseInt(document.getElementById('length').value);
+            let User_Cannon_Offset = parseInt(document.getElementById('offset').value);  
+            let depth_length_user_selection = data.optimize;
             
-            if (!data.miningType || !data.material || !data.orientation) {
-                alert('Please complete all questions');
-                calculateBtn.classList.remove('loading');
-                return;
+            let Overworld = data.miningType === 'overworld';
+            let Stone = Overworld && data.material === 'stone';
+            let Deepslate = Overworld && data.material === 'deepslate';
+
+            let Nether = data.miningType === 'nether';
+            let Basalt = Nether && data.material === 'netherrack and basalt';
+            let Netherrack = Nether && data.material === 'netherrack only';
+
+            function mround(number, multiple) {
+                return Math.round(number / multiple) * multiple;
             }
 
-            const length = parseInt(document.getElementById('length').value);
-            const depth = parseInt(document.getElementById('depth').value);
-            const offset = parseInt(document.getElementById('offset').value);
+            let row_spacing_hopper = 0
+                if (Overworld && Stone){row_spacing_hopper = 4}
+                if (Overworld && Deepslate){row_spacing_hopper = 4}
+                if (Nether && Basalt){row_spacing_hopper = 5}
+                if (Nether && Netherrack){row_spacing_hopper = 6}            
+            let initial_offset_dropper = Math.ceil(User_Cannon_Offset/1.8)            
+            let barrel_count          =	Math.ceil(UserDepth /1.8)
+            let tunnel_length_dropper =	Math.ceil(UserLength/1.8)           
+            let explode_when_done_calc =	(barrel_count + row_spacing_hopper + initial_offset_dropper) >  tunnel_length_dropper            
+            let time_hr_min_sec    =	((((24 * tunnel_length_dropper      * (barrel_count     /row_spacing_hopper) + (20 * tunnel_length_dropper     ))/1200))/60)/24
+            let game_ticks     =	Math.ceil(((20 * tunnel_length_dropper      * (barrel_count     /row_spacing_hopper     )) + (20 * tunnel_length_dropper)))            
+            let calculated_depth =	UserDepth
 
-            if (length < 1 || length > 1000 || depth < 1 || depth > 1000 || offset < 18 || offset > 360) {
-                alert('Please enter valid dimensions within the specified ranges.');
-                calculateBtn.classList.remove('loading');
-                return;
+            let calculated_length =	UserLength
+
+            
+            let row_spacing_hopper_safe =	row_spacing_hopper
+            let initial_offset_dropper_safe = initial_offset_dropper
+            let tunnel_length_dropper_safe = 
+                depth_length_user_selection === "length"
+                ? tunnel_length_dropper + Math.abs(tunnel_length_dropper - (barrel_count + initial_offset_dropper + row_spacing_hopper))
+                : tunnel_length_dropper;
+            let barrel_count_safe =
+                depth_length_user_selection === "depth"
+                ? mround(tunnel_length_dropper_safe - initial_offset_dropper_safe - 2 * row_spacing_hopper_safe, row_spacing_hopper_safe)
+                : barrel_count;
+            let time_hr_min_sec_safe =	((((24 * tunnel_length_dropper_safe * (barrel_count_safe/row_spacing_hopper_safe) + (20 * tunnel_length_dropper_safe))/1200))/60)/24
+            let game_ticks_safe =	Math.ceil(((20 * tunnel_length_dropper_safe * (barrel_count_safe/row_spacing_hopper_safe)) + (20 * tunnel_length_dropper_safe)))
+            let calculated_depth_safe =	Math.ceil((barrel_count_safe - initial_offset_dropper_safe)*1.8)
+            let calculated_length_safe =	Math.ceil( tunnel_length_dropper_safe* 1.8)
+            
+
+            let days = time_hr_min_sec;
+            let totalSeconds = days * 24 * 60 * 60;
+            let hours = Math.floor(totalSeconds / 3600);
+            totalSeconds %= 3600;
+            let minutes = Math.floor(totalSeconds / 60);
+            let seconds = Math.ceil(totalSeconds % 60);
+
+
+            let field_1 = formatStacks(tunnel_length_dropper)
+            let field_2 = formatStacks(barrel_count)
+            let field_3 = formatStacks(row_spacing_hopper)
+            let field_4 = formatStacks(initial_offset_dropper)
+            let field_5 = hours
+            let field_6 = minutes
+            let field_7 = seconds
+            let field_8 = game_ticks
+            let field_9 = explode_when_done_calc ? "Yes" : "No"
+            let field_10 = User_Cannon_Offset
+            let field_11 = calculated_depth
+
+            let field_12 = calculated_length
+
+            if (data.explode === 'no') {
+                days = time_hr_min_sec_safe;
+                totalSeconds = days * 24 * 60 * 60;
+                hours = Math.floor(totalSeconds / 3600);
+                totalSeconds %= 3600;
+                minutes = Math.floor(totalSeconds / 60);
+                seconds = Math.ceil(totalSeconds % 60);
+
+                field_1 = formatStacks(tunnel_length_dropper_safe)
+                field_2 = formatStacks(barrel_count_safe)
+                field_3 = formatStacks(row_spacing_hopper_safe)
+                field_4 = formatStacks(initial_offset_dropper_safe)
+                field_5 = hours
+                field_6 = minutes
+                field_7 = seconds
+                field_8 = game_ticks_safe
+                field_11 = calculated_depth_safe
+                field_12 = calculated_length_safe
+
             }
-
-            // Store the numeric values in data for calculations
-            data.length = length;
-            data.depth = depth;
-            data.offset = offset;
-
-            // Calculations based on Google Sheet formulas
-            const tunnelLength = length + 27; // Tunnel Length (Dropper) = Length + 27
-            const barrelCount = Math.ceil(length / 10); // Barrel Count = Length / 10, rounded up
-            const rowSpacing = Math.round(depth / 5); // Row Spacing (Hopper) = Depth / 5, rounded
-            const initialOffsetDropper = offset * 1.1; // Initial Offset (Dropper) = Offset * 1.1
-
-            // Ensure minimum Initial Offset is at least Row Spacing and 18
-            if (initialOffsetDropper < rowSpacing || initialOffsetDropper < 18) {
-                data.offset = Math.max(rowSpacing, 18) / 1.1; // Adjust offset to meet minimum
-            }
-
-            // Operation Time calculation using the formula: (24x * y + 20x) / 1200 minutes
-            const x = tunnelLength; // Tunnel Length as item count in dropper
-            const y = barrelCount / rowSpacing; // Barrel count divided by row spacing
-            const minutes = (24 * x * y + 20 * x) / 1200; // Time in minutes
-            const seconds = minutes * 60; // Convert to seconds
-            const hours = Math.floor(seconds / 3600);
-            const mins = Math.floor((seconds % 3600) / 60);
-            const secs = Math.floor(seconds % 60);
-            const inGameTicks = Math.round(seconds * 20); // 20 ticks per second
-
-            const explodes = data.explode === 'yes';
-
-            // Format machine configuration items in X Stacks + Y Items format (stack of 64)
-            const tunnelLengthStacks = formatStacks(tunnelLength);
-            const barrelCountStacks = formatStacks(barrelCount);
-            const rowSpacingStacks = formatStacks(rowSpacing);
-            const initialOffsetDropperStacks = formatStacks(Math.round(initialOffsetDropper));
 
             // Format the output as requested, with bold headers and a table for Machine Configuration
-            let result = `<strong>Machine Configuration:</strong>\n<table>\n    <tr><th>Component:</th><th>Items</th></tr>\n    <tr><td>Tunnel Length (Dropper)</td><td>${tunnelLengthStacks}</td></tr>\n    <tr><td>Barrel Count</td><td>${barrelCountStacks}</td></tr>\n    <tr><td>Row Spacing (Hopper)</td><td>${rowSpacingStacks}</td></tr>\n    <tr><td>Initial Offset (Dropper)</td><td>${initialOffsetDropperStacks}</td></tr>\n</table>`;
-            result += `\n<table>\n    <tr><th>Operation Time:</th><th></th></tr>\n    <tr><td>Hours Minutes and Seconds</td><td>${hours} Hours ${mins} Minutes ${secs} Seconds</td></tr>\n    <tr><td>In-game ticks</td><td>${inGameTicks.toLocaleString()}</td></tr></table>`;
-            result += `\n<table>\n    <tr><th>Operation Type:</th><th></th></tr>\n    <tr><td> Machine Likely to Explode:</td><td>${explodes ? 'Yes' : 'No'}</td></tr>\n    <tr><td>Cannon Offset:</td><td>${offset} Blocks</td></tr>\n    <tr><td> Approx Depth:</td><td>${depth} Blocks</td></tr>\n    <tr><td>Approx Length:</td><td>${length} Blocks</td></tr></table>`;
+            let result = `<strong>Machine Configuration:</strong>\n<table>\n    <tr><th>Component:</th><th>Items</th></tr>\n    <tr><td>Tunnel Length (Dropper)</td><td>${field_1}</td></tr>\n    <tr><td>Barrel Count</td><td>${field_2}</td></tr>\n    <tr><td>Row Spacing (Hopper)</td><td>${field_3}</td></tr>\n    <tr><td>Initial Offset (Dropper)</td><td>${field_4}</td></tr>\n</table>`;
+            result += `\n<table>\n    <tr><th>Operation Time:</th><th></th></tr>\n    <tr><td>${field_5} Hours ${field_6} Minutes ${field_7} Seconds</td></tr>\n    </td><td>In-game ticks: ${field_8}</td></tr></table>`;
+            result += `\n<table>\n    <tr><th>Info:</th><th></th></tr>\n    <tr><td> Machine Likely to Explode:</td><td>${field_9}</td></tr>\n    <tr><td>Cannon Offset:</td><td>${field_10} Blocks</td></tr>\n    <tr><td> Approx Depth:</td><td>${field_11} Blocks</td></tr>\n    <tr><td>Approx Length:</td><td>${field_12} Blocks</td></tr></table>`;
 
             result += `\n<strong>BEFORE Starting Cannon:</strong>\n`;
             result += `<ul>`;
@@ -706,8 +745,6 @@
             document.querySelectorAll('.question').forEach(q => q.style.display = 'none');
             document.getElementById('results').style.display = 'block';
             document.getElementById('resultText').innerHTML = result; // Using innerHTML for HTML table and bold rendering
-            
-            calculateBtn.classList.remove('loading'); // Remove loading state after calculation
         }
     </script>
 </body>
