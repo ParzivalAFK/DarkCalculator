@@ -700,12 +700,12 @@
                 if (Nether && Basalt){row_spacing_hopper = 5}
                 if (Nether && Netherrack){row_spacing_hopper = 6}            
             let initial_offset_dropper = Math.ceil(User_Cannon_Offset/1.8)            
-            let barrel_count          =	Math.ceil(UserDepth /1.8)
+            let barrel_count =	Math.ceil(UserDepth /1.8)
             let tunnel_length_dropper =	Math.ceil(UserLength/1.8)           
-            let explode_when_done_calc =	(barrel_count + row_spacing_hopper + initial_offset_dropper) >  tunnel_length_dropper            
-            let time_hr_min_sec    =	((((24 * tunnel_length_dropper      * (barrel_count     /row_spacing_hopper) + (20 * tunnel_length_dropper     ))/1200))/60)/24
-            let game_ticks     =	Math.ceil(((20 * tunnel_length_dropper      * (barrel_count     /row_spacing_hopper     )) + (20 * tunnel_length_dropper)))            
-            let calculated_depth =	UserDepth
+            let explode_when_done_calc = (barrel_count + row_spacing_hopper + initial_offset_dropper) >  tunnel_length_dropper            
+            let time_hr_min_sec = ((((24 * tunnel_length_dropper * (barrel_count /row_spacing_hopper) + (20 * tunnel_length_dropper ))/1200))/60)/24
+            let game_ticks = (Math.ceil(((20 * tunnel_length_dropper * (barrel_count /row_spacing_hopper )) + (20 * tunnel_length_dropper)))).toLocaleString()
+            let calculated_depth = UserDepth
 
             let calculated_length =	UserLength
 
@@ -721,7 +721,7 @@
                 ? mround(tunnel_length_dropper_safe - initial_offset_dropper_safe - 2 * row_spacing_hopper_safe, row_spacing_hopper_safe)
                 : barrel_count;
             let time_hr_min_sec_safe =	((((24 * tunnel_length_dropper_safe * (barrel_count_safe/row_spacing_hopper_safe) + (20 * tunnel_length_dropper_safe))/1200))/60)/24
-            let game_ticks_safe =	Math.ceil(((20 * tunnel_length_dropper_safe * (barrel_count_safe/row_spacing_hopper_safe)) + (20 * tunnel_length_dropper_safe)))
+            let game_ticks_safe = (Math.ceil(((20 * tunnel_length_dropper_safe * (barrel_count_safe/row_spacing_hopper_safe)) + (20 * tunnel_length_dropper_safe)))).toLocaleString()
             let calculated_depth_safe =	Math.ceil((barrel_count_safe - initial_offset_dropper_safe)*1.8)
             let calculated_length_safe =	Math.ceil( tunnel_length_dropper_safe* 1.8)
             
@@ -740,13 +740,6 @@
             let field_12 = calculated_length
 
             if (data.explode === 'no') {
-                days = time_hr_min_sec_safe;
-                totalSeconds = days * 24 * 60 * 60;
-                hours = Math.floor(totalSeconds / 3600);
-                totalSeconds %= 3600;
-                minutes = Math.floor(totalSeconds / 60);
-                seconds = Math.ceil(totalSeconds % 60);
-
                 field_1 = formatStacks(tunnel_length_dropper_safe)
                 field_2 = formatStacks(barrel_count_safe)
                 field_3 = formatStacks(row_spacing_hopper_safe)
@@ -755,7 +748,6 @@
                 field_8 = game_ticks_safe
                 field_11 = calculated_depth_safe
                 field_12 = calculated_length_safe
-
             }
 
             // Format the output as requested, with bold headers and a table for Machine Configuration
