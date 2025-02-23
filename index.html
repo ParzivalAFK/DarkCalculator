@@ -464,23 +464,23 @@
         <h2>Select Targeted Rock Type:</h2>
         <div class="card-container">
             <div class="card" onclick="selectRockTypeAndNext('overworld-stone', 'Overworld', 'Stone', 'Typically Above y=8')">
-                <img src="./textures/screenshot1.png" alt="Overworld Stone" onerror="this.src='default-image.png'; console.error('Image not found:', this.src);">
+                <img src="./textures/screenshot1.png" alt="Overworld Stone">
                 <div class="card-title">Overworld</div>
                 <div class="card-description">Stone Height</div>
             </div>
             <div class="card" onclick="selectRockTypeAndNext('overworld-deepslate', 'Overworld', 'Deepslate', 'Typically Below y=8 [Diamond Default]')">
-                <img src="./textures/screenshot2.png" alt="Overworld Deepslate" onerror="this.src='default-image.png'; console.error('Image not found:', this.src);">
+                <img src="./textures/screenshot2.png" alt="Overworld Deepslate">
                 <div class="card-title">Overworld</div>
                 <div class="card-description">Deepslate Height</div>
                 <div class="card-description-2">Typical Diamond Setup</div>
             </div>
             <div class="card" onclick="selectRockTypeAndNext('nether-netherrack', 'Nether', 'Netherrack Only', '(If your blast area does not have basalt areas)')">
-                <img src="./textures/screenshot3.png" alt="Nether Netherrack" onerror="this.src='default-image.png'; console.error('Image not found:', this.src);">
+                <img src="./textures/screenshot3.png" alt="Nether Netherrack">
                 <div class="card-title">Nether</div>
                 <div class="card-description">Netherrack Only</div>
             </div>
             <div class="card" onclick="selectRockTypeAndNext('nether-netherrack-basalt', 'Nether', 'Netherrack + Basalt', '[Ancient Debris Default]')">
-                <img src="./textures/screenshot4.png" alt="Nether Netherrack + Basalt" onerror="this.src='default-image.png'; console.error('Image not found:', this.src);">
+                <img src="./textures/screenshot4.png" alt="Nether Netherrack + Basalt">
                 <div class="card-title">Nether</div>
                 <div class="card-description">Netherrack + Basalt</div>
                 <div class="card-description-2">Typical Ancient Debris Setup</div>
@@ -492,11 +492,11 @@
         <h2>Choose Orientation</h2>
         <div class="card-container">
             <div class="card" onclick="selectOrientationAndNext('up')">
-                <img src="./textures/diagram_up.png" alt="Up Orientation" onerror="this.src='default-image.png'; console.error('Image not found:', this.src);">
+                <img src="./textures/diagram_up.png" alt="Up Orientation">
                 <div class="card-title">Up</div>
             </div>
             <div class="card" onclick="selectOrientationAndNext('side')">
-                <img src="./textures/diagram_side.png" alt="Side Orientation" onerror="this.src='default-image.png'; console.error('Image not found:', this.src);">
+                <img src="./textures/diagram_side.png" alt="Side Orientation">
                 <div class="card-title">Side</div>
             </div>
         </div>
@@ -536,7 +536,6 @@
     </div>
 
     <script>
-        alert("STATUS: Alpha Testing State. Please report any issues or suggestions. Thank you!");
         let currentQuestion = 1;
         const data = { explode: 'yes' };
 
@@ -606,9 +605,7 @@
                 const length = document.getElementById('length').value;
                 const depth = document.getElementById('depth').value;
                 const offset = document.getElementById('offset').value;
-                q3Next.disabled = !(length >= 1 && length <= 1000 && 
-                                  depth >= 1 && depth <= 1000 && 
-                                  offset >= 18 && offset <= 360);
+                q3Next.disabled = !(length >= 1 && length <= 1000 && depth >= 1 && depth <= 1000 && offset >= 18 && offset <= 360);
             }
         }
 
@@ -714,10 +711,7 @@
             let time_hr_min_sec = ((((24 * tunnel_length_dropper * (barrel_count /row_spacing_hopper) + (20 * tunnel_length_dropper ))/1200))/60)/24
             let game_ticks = (Math.ceil(((20 * tunnel_length_dropper * (barrel_count /row_spacing_hopper )) + (20 * tunnel_length_dropper)))).toLocaleString()
             let calculated_depth = UserDepth
-
             let calculated_length =	UserLength
-
-            
             let row_spacing_hopper_safe =	row_spacing_hopper
             let initial_offset_dropper_safe = initial_offset_dropper
             let tunnel_length_dropper_safe = 
@@ -731,20 +725,16 @@
             let time_hr_min_sec_safe =	((((24 * tunnel_length_dropper_safe * (barrel_count_safe/row_spacing_hopper_safe) + (20 * tunnel_length_dropper_safe))/1200))/60)/24
             let game_ticks_safe = (Math.ceil(((20 * tunnel_length_dropper_safe * (barrel_count_safe/row_spacing_hopper_safe)) + (20 * tunnel_length_dropper_safe)))).toLocaleString()
             let calculated_depth_safe =	Math.ceil((barrel_count_safe - initial_offset_dropper_safe)*1.8)
-            let calculated_length_safe =	Math.ceil( tunnel_length_dropper_safe* 1.8)
-            
+            let calculated_length_safe = Math.ceil( tunnel_length_dropper_safe* 1.8)            
 
             let field_1 = formatStacks(tunnel_length_dropper)
             let field_2 = formatStacks(barrel_count)
             let field_3 = formatStacks(row_spacing_hopper)
             let field_4 = formatStacks(initial_offset_dropper)
             let field_5 = formatTime(time_hr_min_sec)
-
             let field_8 = game_ticks
             let field_9 = explode_when_done_calc ? "Yes" : "No"
-            let field_10 = User_Cannon_Offset
             let field_11 = calculated_depth
-
             let field_12 = calculated_length
 
             if (data.explode === 'no') {
@@ -759,79 +749,153 @@
                 field_12 = calculated_length_safe
             }
 
-            // Format the output as requested, with bold headers and a table for Machine Configuration
-            let result = `<strong>Machine Configuration:</strong>\n<table>\n    <tr><th>Component:</th><th>Items</th></tr>\n    <tr><td>Tunnel Length (Dropper)</td><td>${field_1}</td></tr>\n    <tr><td>Barrel Count</td><td>${field_2}</td></tr>\n    <tr><td>Row Spacing (Hopper)</td><td>${field_3}</td></tr>\n    <tr><td>Initial Offset (Dropper)</td><td>${field_4}</td></tr>\n</table>`;
-            result += `\n<table>\n    <tr><th>Operation Time:</th><th></th></tr>\n    <tr><td>${field_5}</td></tr>\n    </td><td>In-game ticks: ${field_8}</td></tr></table>`;
-            result += `\n<table>\n    <tr><th>Info:</th><th></th></tr>\n    <tr><td> Machine Likely to Explode:</td><td>${field_9}</td></tr>\n    <tr><td>Cannon Offset:</td><td>${field_10} Blocks</td></tr>\n    <tr><td> Approx Depth:</td><td>${field_11} Blocks</td></tr>\n    <tr><td>Approx Length:</td><td>${field_12} Blocks</td></tr></table>`;
-            
-            result += `\n<strong>BEFORE Starting Cannon:</strong>\n`;
-            result += `<ul>`;
-                    result += `<li><strong>Ensure sufficient clearance.</strong> Clear the three red chunks and the green chunk to the chunk borders and a few blocks above.</li>`;
-                    result += `<li><strong>Manage chunk activation.</strong> This is a <strong>LAZY CHUNK MACHINE</strong>—only the green chunk should be active. The red chunks <strong>must</strong> remain in a Lazy Chunk state.</li>`;
-                    result += `<li><strong>Avoid loading red chunks.</strong> Do not load the red chunks while the machine is duping TNT. Wait for the full timer duration (or longer) before returning.</li>`;
-            result += `</ul>`;
-            result += `\n<strong>Resources:</strong>\n`;
-            result += `<ul>`;
-                    result += `<li>OG Calculator: <a href='https://docs.google.com/spreadsheets/d/12KDoqfOpkEjcVNU6M5PPXR_9Livz2Vt1xgP4NBo0eBg'><strong>Darks Cannon by Sam. and Table</strong></a></li>`;
-                    result += `<li>For any questions regarding the use of this calculator, join the <a href='https://discord.gg/vPyUBcdmZV'><strong>TNT Archive</strong></a> discord server and ping <code>@sam</code> or <code>@name</code>.</li>`;
-                    result += `<li>Dark's Original Video: <a href='https://www.youtube.com/watch?v=5hq4TwvVp6o'><strong>YouTube</strong></a></li>`;
-                    result += `<li>Schematics: <a href='https://www.mediafire.com/file/gtfve0x8ozkjddi/Mining_machines.zip/file'><strong>Mediafire</strong></a></li>`;
-            result += `</ul>`;
-
-            result += `\n<strong>Notes:</strong>\n`;
-            result += `<ul>`;
-                result += `<li>Schematics can be rotated and mirrored.</li>`;
-                result += `<li>Max size, with current containers, is about 1k by 1k.</li>`;
-                result += `<li>For Nether Dimension use, replace Waterlogged Stair with Enchanting Table.</li>`;
-                result += `<li>For Netherite mining, place the Enchanting Tables at y=11 (<em>Thanks MadMan25!</em>).</li>`;
-                result += `<li>Using the non-breaking configuration, you can split your mining project into segments by running a full batch, increasing the offset, and running it again. This allows you to create a blast area that exceeds the 1,000-block batch depth. (<em>To increase the length, you would need to move or build a new machine.</em>)</li>`;
-            result += `</ul>`;
-
-            result += `\n<strong>Notes:</strong>\n`;
-            result += `<ul>`;
-                result += `<li>Schematics can be rotated and mirrored.</li>`;
-                result += `<li>Max size, with current containers, is about 1k by 1k.</li>`;
-                result += `<li>For Nether Dimension use, replace Waterlogged Stair with Enchanting Table.</li>`;
-                result += `<li>For Netherite mining, place the Enchanting Tables at y=11 (<em>Thanks MadMan25!</em>).</li>`;
-                result += `<li>Using the non-breaking configuration, you can split your mining project into segments by running a full batch, increasing the offset, and running it again. This allows you to create a blast area that exceeds the 1,000-block batch depth. (To increase the length, you would need to move or build a new machine.)</li>`;
-            result += `</ul>`;
-
-            result += `<h2>Proper Cannon Loading Guide</h2>`
-            result += `<h3>Singleplayer</h3>`
-            result += `<ul>`
-            result += `    <li>Set your Render Distance to 2 chunks and AFK in the designated "Chunk Loader" chunk.</li>`
-            result += `    <li>Alternatively, build a chunk loader and play elsewhere, ensuring that you do not load the red (lazy) chunks while the cannon is operating.</li>`
-            result += `</ul>`
-            result += `<h3>Multiplayer</h3>`
-            result += `<ul>`
-            result += `    <li>Since most servers do not allow render distance adjustments, your best option is to build a chunk loader in the designated "Chunk Loader" chunk.</li>`
-            result += `    <li>Ensure that no other players on the server accidentally load the cannon’s red (lazy) chunks during operation.</li>`
-            result += `</ul>`
-            result += `<h3>General Considerations (Both Singleplayer & Multiplayer)</h3>`
-            result += `<p>In vanilla Minecraft, you need a mechanism to activate the cannon while ensuring that the red (lazy) chunks remain unloaded.</p>`
-            result += `<h4>Viable "Remote" Activation Methods (to trigger the machine after leaving the area via a chunk loader):</h4>`
-            result += `<ul>`
-            result += `    <li>Item Despawn Timer</li>`
-            result += `    <li>Entity Detector (e.g., a minecart pressing against a pressure plate)</li>`
-            result += `    <li>Hopper Timer</li>`
-            result += `</ul>`
-            result += `<h4>Alternative for Singleplayer (AFK in Chunk Loader Chunk)</h4>`
-            result += `<p>If you prefer to AFK in the chunk loader chunk, the simplest method is to build a redstone line extending to your chunk, allowing you to activate the cannon remotely.</p>`
-                    // Add Optional Commands section
-            result += `\n<strong>Optional Commands:</strong>
+            let result = `
+            <div>
+                <strong>Machine Configuration:</strong>
                 <table>
-                    <tr><th>If you want to see cannon running:</th><th>Commands</th></tr>\n
-                    <tr><td><strong>Option 1):</strong> Vanilla Spectator Mode</td> <td><code>/gamerule spectatorgeneratechunks false</code></td></tr>\n
-                    <tr><td><strong>Option 2):</strong> Carpet Mod</td><td><code>/carpet creativePlayersLoadChunks false</code></td></tr>\n
-                    <tr><th>Lag Optimizations (With Carpet and Carpet TIS mod):</th><th> </th></tr>\n
-                    <tr><td>Optimizes TNT for better performance</td><td><code>/carpet OptimizedTNT True</code></td></tr>\n
-                    <tr><td>Gives TNT updates higher priority</td><td><code>/carpet OptimizedTNTHighPriority True</code></td></tr>\n
-                    <tr><td>Speeds up entity movement calculations</td><td><code>/carpet OptimizedFastEntityMovement True</code></td></tr>\n                
-                </table>`;
+                    <tr>
+                        <th>Component:</th><th>Items</th>
+                    </tr>
+                    <tr>
+                        <td>Tunnel Length (Dropper)</td><td>${field_1}</td>
+                    </tr>
+                    <tr>
+                        <td>Barrel Count</td><td>${field_2}</td>
+                    </tr>
+                    <tr>
+                        <td>Row Spacing (Hopper)</td><td>${field_3}</td>
+                    </tr>
+                    <tr>
+                        <td>Initial Offset (Dropper)</td><td>${field_4}</td>
+                    </tr>
+                </table>
+                </div>`;
             
+            result += `
+            <div>
+                <table>
+                    <tr>
+                        <th>Operation Time:</th><th></th>
+                    </tr>
+                    <tr>
+                        <td>${field_5}</td>
+                    </tr>
+                    <tr>
+                        <td>In-game ticks: ${field_8}</td>
+                    </tr>
+                </table>
+            </div>`;
 
+            result += `
+                <div>
+                <table>
+                    <tr>
+                        <th>Info:</th> <th></th>
+                    </tr>
+                    <tr>
+                        <td> Machine Likely to Explode:</td><td>${field_9}</td>
+                    </tr>
+                    <tr>
+                        <td>Cannon Offset:</td><td>${User_Cannon_Offset} Blocks</td>
+                    </tr>
+                    <tr>
+                        <td> Approx Depth:</td><td>${field_11} Blocks</td>
+                    </tr>
+                    <tr>
+                        <td>Approx Length:</td><td>${field_12} Blocks</td>
+                    </tr>
+                </table>
+                </div>`;
+            
+            result += `
+                <div>
+                <strong>BEFORE Starting Cannon:</strong>
+                <ul>
+                    <li><strong>Ensure sufficient clearance.</strong> Clear the three red chunks and the green chunk to the chunk borders and a few blocks above.</li>
+                    <li><strong>Manage chunk activation.</strong> This is a <strong>LAZY CHUNK MACHINE</strong>—only the green chunk should be active. The red chunks <strong>must</strong> remain in a Lazy Chunk state.</li>
+                    <li><strong>Avoid loading red chunks.</strong> Do not load the red chunks while the machine is duping TNT. Wait for the full timer duration (or longer) before returning.</li>
+                </ul>
+                </div>`;
 
-            document.getElementById('resultText').innerHTML = result; // Update results text
+            result += `
+                <div>
+                <strong>Resources:</strong>
+                <ul>
+                    <li>OG Calculator: <a href='https://docs.google.com/spreadsheets/d/12KDoqfOpkEjcVNU6M5PPXR_9Livz2Vt1xgP4NBo0eBg'><strong>Darks Cannon by Sam. and Table</strong></a></li>
+                    <li>For any questions regarding the use of this calculator, join the <a href='https://discord.gg/vPyUBcdmZV'><strong>TNT Archive</strong></a> discord server and ping <code>@sam</code> or <code>@name</code>.</li>
+                    <li>Dark's Original Video: <a href='https://www.youtube.com/watch?v=5hq4TwvVp6o'><strong>YouTube</strong></a></li>
+                    <li>Schematics: <a href='https://www.mediafire.com/file/gtfve0x8ozkjddi/Mining_machines.zip/file'><strong>Mediafire</strong></a></li>
+                </ul>
+                </div>`;
+
+            result += `
+            <div>
+                <strong>Notes:</strong>
+                <ul>
+                    <li>Schematics can be rotated and mirrored.</li>
+                    <li>Max size, with current containers, is about 1k by 1k.</li>
+                    <li>For Nether Dimension use, replace Waterlogged Stair with Enchanting Table.</li>
+                    <li>For Netherite mining, place the Enchanting Tables at y=11 (<em>Thanks MadMan25!</em>).</li>
+                    <li>Using the non-breaking configuration, you can split your mining project into segments by running a full batch, increasing the offset, and running it again. This allows you to create a blast area that exceeds the 1,000-block batch depth. (<em>To increase the length, you would need to move or build a new machine.</em>)</li>
+                </ul>
+                </div>`;
+
+            result += `
+            <div>
+            <h2>Proper Cannon Loading Guide</h2>
+                <h3>Singleplayer</h3>
+                <ul>
+                    <li>Set your Render Distance to 2 chunks and AFK in the designated "Chunk Loader" chunk.</li>
+                    <li>Alternatively, build a chunk loader and play elsewhere, ensuring that you do not load the red (lazy) chunks while the cannon is operating.</li>
+                </ul>
+                <h3>Multiplayer</h3>
+                <ul>
+                    <li>Since most servers do not allow render distance adjustments, your best option is to build a chunk loader in the designated "Chunk Loader" chunk.</li>
+                    <li>Ensure that no other players on the server accidentally load the cannon’s red (lazy) chunks during operation.</li>
+                </ul>
+                <h3>General Considerations (Both Singleplayer & Multiplayer)</h3>
+                    <p>In vanilla Minecraft, you need a mechanism to activate the cannon while ensuring that the red (lazy) chunks remain unloaded.</p>
+                <h4>Viable "Remote" Activation Methods (to trigger the machine after leaving the area via a chunk loader):</h4>
+                <ul>
+                    <li>Item Despawn Timer</li>
+                    <li>Entity Detector (e.g., a minecart pressing against a pressure plate)</li>
+                    <li>Hopper Timer</li>
+                </ul>
+                <h4>Alternative for Singleplayer (AFK in Chunk Loader Chunk)</h4>
+                    <p>If you prefer to AFK in the chunk loader chunk, the simplest method is to build a redstone line extending to your chunk, allowing you to activate the cannon remotely.</p>
+                    </div>`
+                
+                    
+            // Add Optional Commands section
+            result += `
+                <div>
+                <strong>Optional Commands:</strong>
+                <table>
+                    <tr>
+                        <th>If you want to see cannon running:</th><th>Commands</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Option 1):</strong> Vanilla Spectator Mode</td> <td><code>/gamerule spectatorgeneratechunks false</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Option 2):</strong> Carpet Mod</td><td><code>/carpet creativePlayersLoadChunks false</code></td>
+                    </tr>
+                    <tr>
+                        <th>Lag Optimizations (With Carpet and Carpet TIS mod):</th><th> </th>
+                    </tr>
+                    <tr>
+                        <td>Optimizes TNT for better performance</td><td><code>/carpet OptimizedTNT True</code></td>
+                    </tr>
+                    <tr>
+                        <td>Gives TNT updates higher priority</td><td><code>/carpet OptimizedTNTHighPriority True</code></td>
+                    </tr>
+                    <tr>
+                        <td>Speeds up entity movement calculations</td><td><code>/carpet OptimizedFastEntityMovement True</code></td>
+                    </tr>                
+                </table>
+                </div>`
+
+            document.getElementById('resultText').innerHTML = result;
         }
     </script>
 </body>
